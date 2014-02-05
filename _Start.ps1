@@ -79,4 +79,4 @@ $prop = [ordered]@{
 
 $dl = New-Object -TypeName psobject -Property $prop
 
-$dl.Directory | Find-Sfv | Read-SfvLog | Find-RarFile | Extract-File | Start-TheRenamer -dl $dl
+$dl | Find-Sfv | Read-SfvLog | Find-RarFile | Extract-File | Start-TheRenamer -dl $dl

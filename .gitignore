@@ -1,3 +1,4 @@
 Config.ps1
 Test-Vars.ps1
+*.winmerge
 Sync*

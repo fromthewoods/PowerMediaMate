@@ -28,7 +28,7 @@ function Get-tmdbRequest
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         $tmdbApiUrl = "http://api.themoviedb.org/3/"
 
@@ -39,6 +39,7 @@ function Get-tmdbRequest
         $webClient = New-Object System.Net.WebClient
         $webClient.Headers.Add("accept", "application/json")
         $response = $webClient.DownloadString($uri) | ConvertFrom-Json
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Return $response
     }
 }
@@ -65,9 +66,10 @@ function Get-tmdbMovie
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         $query = "movie/" + $movieID
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Get-tmdbRequest $query
     }
 }
@@ -98,6 +100,7 @@ function Find-tmdbMovie
         Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         $query = "search/movie?query=" + $query
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Get-tmdbRequest $query -additional
     }
 }

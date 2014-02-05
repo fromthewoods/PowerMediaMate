@@ -24,7 +24,7 @@ function Start-TVRenamer
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         # Get the array of the filename to use for parsing. Pass the whole object of the file.
         $nameArray = Get-NameArray $file -TV
@@ -35,7 +35,7 @@ function Start-TVRenamer
 
 
         Write-Log "Returning: $($obj.DestFile)" -DebugMode
-        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Send-Message -subject 'Download Complete' -body $obj.DestFile
     }
 }
@@ -57,7 +57,7 @@ function Create-EpisodeObject
         $array
     )
     
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     for ($i=0; $i -le $array.Count; $i++){
         # Find the SxxExx and we can assume that everything preceeding is the SeriesName
@@ -97,7 +97,7 @@ function Create-EpisodeObject
     $obj = Add-DestFileInfo $obj
 
 
-    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
     Return $obj
 }
 
@@ -116,7 +116,7 @@ function Add-DestFileInfo
         [Parameter(Mandatory=$true)]$obj
     )
 
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     If ($obj.SeasonNumber -lt 10) { $s = "0" + $obj.SeasonNumber }
     Else { $s = $obj.SeasonNumber }
@@ -131,6 +131,6 @@ function Add-DestFileInfo
     $obj | Add-Member -Type NoteProperty -Name 'DestPath' -Value $DestPath
     $obj | Add-Member -Type NoteProperty -Name 'DestFullPath' -Value $($DestPath + $DestFile)
 
-    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
     Return $obj
 }

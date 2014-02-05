@@ -17,23 +17,19 @@ function Find-Sfv
     (
         # The directory to scan for .sfv files
         [Parameter(Mandatory=$true,
-                   ValueFromPipeline=$true,
-                   Position=0)]
+                   ValueFromPipelineByPropertyName=$true)]
         [ValidateScript({$_.GetType().Name -eq 'String'})]
-        $dir
+        $Directory
     )
 
-    Process
-    {
-        If (Test-Path -PathType Container $dir) {
-            # Looking for a download in the base uTorrent directory
-            If ($dir -like $uTorrentDL) { $sfv = Get-ChildItem -Path $dir -Filter *.sfv }
-            Else { $sfv = Get-ChildItem -Path $dir -Filter *.sfv -Recurse }
+    If (Test-Path -PathType Container $Directory) {
+        # Looking for a download in the base uTorrent directory
+        If ($Directory -like $uTorrentDL) { $objSFV = Get-ChildItem -Path $Directory -Filter *.sfv }
+        Else { $objSFV = Get-ChildItem -Path $Directory -Filter *.sfv -Recurse }
 
-            If ($sfv) { Return $sfv }
-            Else { Write-Log "No sfv files to analyze in: $dir"; Return Get-Item $dir }
-        } Else { Write-Log "Could not find the directory: $dir"; Exit }
-    }
+        If ($objSFV) { Return $objSFV }
+        Else { Write-Log "No sfv files to analyze in: $Directory"; Return Get-Item $Directory }
+    } Else { Write-Log "Could not find the directory: $Directory"; Exit }
 }
 
 

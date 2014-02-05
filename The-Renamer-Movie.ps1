@@ -26,7 +26,7 @@ function Start-MovieRenamer
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         # Get the move file name array
         $movieArray = Get-NameArray $dl.Title -Movie
@@ -41,7 +41,7 @@ function Start-MovieRenamer
         ########Create-Links $obj
 
         Write-Log "Returning: $($obj.DestFile)" -DebugMode
-        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Send-Message -subject 'Download Complete' -body $obj.DestFile
     }
 }
@@ -72,7 +72,7 @@ function Create-SearchMovieObject
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         for ($i=0; $i -le $array.Count; $i++){
             # Find the year "19xx" or "20xx" and we can assume everything preceeding is the move Name
@@ -94,7 +94,7 @@ function Create-SearchMovieObject
             'Extension'     = $file.Extension
         }
         $obj = New-Object -TypeName psobject -Property $prop
-        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Return $obj
     }
 }
@@ -130,7 +130,7 @@ function Select-Movie
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         If ($resultObj.total_results -gt 1) {
             Foreach ($r in $resultObj.results) {
@@ -154,7 +154,7 @@ function Select-Movie
                         'DestFullPath'  = "$MoviesDir`\$($movieTitle) ($($searchObj.searchYear))`\$($movieTitle)$($searchObj.Extension)"
                     }
                     $obj = New-Object -TypeName psobject -Property $prop
-                    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+                    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
                     Return $obj
                 }
             }
@@ -178,7 +178,7 @@ function Select-Movie
                 'DestFullPath'  = "$MoviesDir`\$movieTitle ($($searchObj.searchYear))`\$($movieTitle)$($searchObj.Extension)"
             }
             $obj = New-Object -TypeName psobject -Property $prop
-            Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+            Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
             Return $obj
         }
     }

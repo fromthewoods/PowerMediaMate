@@ -27,7 +27,7 @@ function Start-TheRenamer
 
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         If ($dir -like $uTorrentDL) { $search = Get-ChildItem -Path $dir\* -Include $videofiletypes }
         Else { $search = Get-ChildItem -Path $dir\* -Include $videofiletypes -Recurse }
@@ -62,7 +62,7 @@ function Start-TheRenamer
                 # Need to add function to search for names like Pandorum.HD.720p.XViD-WOW.avi
             }
         }
-        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
     }
 }
 
@@ -89,7 +89,7 @@ function Get-NameArray
         [switch]$Movie
     )
 
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     $delimiters = @('\.','_','-',' ')
 
@@ -113,14 +113,14 @@ function Get-NameArray
             If ($element -match "^S\d\dE\d\d$" -and ($TV)) { 
                 Write-Log "  Found delimiter: $delimiter" -DebugMode
                 Write-Log "  Get-NameArray :Return: $array" -DebugMode
-                Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+                Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
                 Return $array
             }
             # Look for the year "19xx" or "20xx"
             ElseIf (($element -match "^20\d\d$" -or $element -match "^19\d\d$") -and ($Movie)) {
                 Write-Log "  Found delimiter: $delimiter" -DebugMode
                 Write-Log "  Get-NameArray :Return: $array" -DebugMode
-                Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+                Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
                 Return $array
             }
         }
@@ -154,7 +154,7 @@ function Rename-File
     )
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         # Create the new path if it doesn't exist
         If (!(Test-Path $obj.DestPath)) {
@@ -182,7 +182,7 @@ function Rename-File
             Copy-Item -Path $file -Destination $obj.DestFullPath
             If (!($?)) { Write-Log "ERROR: failed to copy file."; Exit }
         }
-        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
     }
 }
 
@@ -211,7 +211,7 @@ function Remove-IllegalCharacters
     )
     Process
     {
-        Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
         Write-Log " Original string: $file"
 
@@ -221,7 +221,7 @@ function Remove-IllegalCharacters
         $newfile = [Regex]::Replace($file, $pattern, '')
 
         Write-Log " New string: $newfile"
-        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+        Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
         Return $newfile
     }
 }

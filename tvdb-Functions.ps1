@@ -53,7 +53,7 @@ Function Find-tvdbSeries {
         [Parameter(Mandatory=$true)][string]$seriesName
     )
 
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     $webClient = New-Object System.Net.WebClient
     $getSeriesUrl = $tvdbApiUrl + 'GetSeries.php?seriesname=' + $seriesName
@@ -61,7 +61,7 @@ Function Find-tvdbSeries {
     [xml]$seriesXml = $webClient.DownloadString($getSeriesUrl)
 
     Write-Log $seriesXml -DebugMode
-    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
     Return $seriesXml
 }
 
@@ -73,13 +73,13 @@ Function Get-tvdbEpInfo {
         [Parameter(Mandatory = $true)][string]$seriesID
     )
 
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     $webClient = New-Object System.Net.WebClient
     $getEpInfoUrl = $tvdbApiUrl + $apiKeyTVDB + "series/" + $seriesID + "/all/en.xml"
 
     [xml]$epInfoXml = $webClient.DownloadString($getEpInfoUrl)
-
+    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
     Return $epInfoXml
 }
 
@@ -99,7 +99,7 @@ Function Select-tvdbSeriesID {
         [Parameter(Mandatory=$true)][string]$searchName
     )
 
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     $seriesName = $searchResultsXml.Data.Series.SeriesName
 
@@ -124,7 +124,7 @@ Function Select-tvdbSeriesID {
         # Add more logic here to figure out the best result to return.
         }
     }
-    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
 }
 
 <#
@@ -144,7 +144,7 @@ Function Add-tvdbEpInfo {
         [Parameter(Mandatory=$true)]$obj
     )
 
-    Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "`n*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
     $nodelist = $xml.SelectNodes("/Data/Episode")
     foreach ($ep in $nodelist) {
@@ -157,5 +157,5 @@ Function Add-tvdbEpInfo {
             Return $obj
         }
     }
-    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***" -DebugMode
+    Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
 }
