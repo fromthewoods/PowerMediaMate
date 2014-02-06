@@ -131,7 +131,7 @@ Function Truncate-Log ($log) {
 
 <#
 .Synopsis
-   Sends a text.
+   Sends a text
 .DESCRIPTION
    Long description
 .EXAMPLE
