@@ -60,7 +60,6 @@ function Start-TheRenamer
                 }
                 Else { Write-Log " No label found for: $dir" }
                 # Need to add function to search for names like Pandorum.HD.720p.XViD-WOW.avi
-                # and Riddick [2013] UNRATED DC 1080p BluRay AAC x264-[ETRG].mp4
             }
         }
         Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
