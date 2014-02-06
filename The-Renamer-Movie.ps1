@@ -151,7 +151,7 @@ function Select-Movie
                         'SourceFullPath'= $searchObj.SourceFullPath
                         'DestFile'      = "$($movieTitle)$($searchObj.Extension)"
                         'DestPath'      = "$MoviesDir`\$($movieTitle) ($($searchObj.searchYear))`\"
-                        'DestFullPath'  = "$MoviesDir`\$($movieTitle) ($($searchObj.searchYear))`\$($movieTitle)$($searchObj.Extension)"
+                        'DestFullPath'  = "$MoviesDir`\$($movieTitle) ($($searchObj.searchYear))`\$($searchObj.SourceFile)"
                     }
                     $obj = New-Object -TypeName psobject -Property $prop
                     Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
@@ -175,7 +175,7 @@ function Select-Movie
                 'SourceFullPath'= $searchObj.SourceFullPath
                 'DestFile'      = "$movieTitle$($searchObj.Extension)"
                 'DestPath'      = "$MoviesDir`\$movieTitle ($($searchObj.searchYear))`\"
-                'DestFullPath'  = "$MoviesDir`\$movieTitle ($($searchObj.searchYear))`\$($movieTitle)$($searchObj.Extension)"
+                'DestFullPath'  = "$MoviesDir`\$movieTitle ($($searchObj.searchYear))`\$($searchObj.SourceFile)"
             }
             $obj = New-Object -TypeName psobject -Property $prop
             Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
