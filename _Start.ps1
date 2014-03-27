@@ -54,7 +54,6 @@ cd $includesDir
 $date = Get-Date -UFormat %Y-%m-%d_%H-%M-%S
 $Global:log = "$logLocation\$date`_$Title.log"
 Check-Dependencies
-#Truncate-Log $log
 
 Write-Log "########## STARTING JOB ##########" -Stamp # Make the log pretty
 Write-Log " Name: $Name `
