@@ -52,7 +52,7 @@ function Start-TheRenamer
         Else {
             Foreach ($f in $file) {
                 Write-Log " Found: $f" -DebugMode
-                If ($dl.Label -eq 'TV' -or $f.Name -match "\w\.S\d\dE\d\d\.") {
+                If ($dl.Label -eq 'TV' -or $f.Name -match "\w\.S\d\dE\d\d\." -or $f.Directory.Name -match "S\d\dE\d\d") {
                     Start-TVRenamer $f $dl
                 }
                 ElseIf ($dl.Label -eq 'Movie' -or $dl.Title -match "\w*20\d\d\w*" -or $dl.Title -match "\w*19\d\d\w*") {
