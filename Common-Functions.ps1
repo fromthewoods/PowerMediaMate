@@ -1,8 +1,9 @@
-﻿<#========================================================================================
- Function: Check-Dependencies
- 
- Synopsis:	Checks for the Dependencies required for this script.
-========================================================================================#>
+﻿<#
+.Synopsis
+   Checks for the Dependencies required for this script.
+.DESCRIPTION
+   Runs through a list of checks required to allow this script to run properly.
+#>
 Function Check-Dependencies { 
     Write-Log "*** Entering: $($MyInvocation.MyCommand.Name) ***" -DebugMode
 
@@ -11,54 +12,18 @@ Function Check-Dependencies {
 
 	# Check for 7-Zip
     Set-Alias sz $SevenZip -Scope Global
-	If (!(Test-Path $SevenZip)) {Write-Log "ERROR: Could not find 7z.exe at $SevenZip" -DebugMode ; Exit}
+	If (!(Test-Path $SevenZip)) {Write-Log "ERROR: Could not find 7z.exe at $SevenZip"; Exit}
 
 	# Check for QuickSFV
-	If (!(Test-Path $QuickSFV)) {Write-Log "ERROR: Could not find QuickSFV.exe at $QuickSFV" -DebugMode ; Exit}
+	If (!(Test-Path $QuickSFV)) {Write-Log "ERROR: Could not find QuickSFV.exe at $QuickSFV"; Exit}
 
     #Create the SFV output dir
-    If (!(Test-Path $sfvLogsDir)) { Write-Log "Creating $sfvLogsDir" -DebugMode ; mkdir $sfvLogsDir | Out-Null }
+    If (!(Test-Path $sfvLogsDir)) { Write-Log "Creating $sfvLogsDir"; mkdir $sfvLogsDir | Out-Null }
 
     #Create the output dir
-    If (!(Test-Path $tempExtractPath)) { Write-Log "Creating $tempExtractPath" -DebugMode ; mkdir $tempExtractPath | Out-Null }
+    If (!(Test-Path $tempExtractPath)) { Write-Log "Creating $tempExtractPath"; mkdir $tempExtractPath | Out-Null }
     
     Write-Log "Dependency check passed." -DebugMode
-}
-
-
-<#========================================================================================
- Function: Write-Log
- 
- Synopsis:	Simply writes to the log file, prepending the date/time
-========================================================================================#>
-Function Write-Log-Old {
-	[cmdletBinding()]
-	Param
-    (
-        [Parameter(Position=0)][ValidateNotNullOrEmpty()][string]$Message
-    ,
-        [switch]$Stamp
-    ,
-        [switch]$DebugMode
-    )
-    
-    #Create log file if it doesn't exist
-    If (!(Test-Path $log)) { 
-        $logPath = Split-Path -Parent $log
-        $logpath = "$logpath\"
-        mkdir $logPath
-        New-Item $log -ItemType "file"
-    } 
-    If ((!($DebugMode)) -or (($DebugMode) -and ($isDebug))) {
-        # Write to the log
-        If ($Stamp) {
-            Write-Host "$(Get-Date) $Message"
-            Write-Output "$(Get-Date) $Message" | Out-File -FilePath $log -Append
-        } Else {
-            Write-Host "$Message"
-            Write-Output "$Message" | Out-File -FilePath $log -Append
-        }
-    }
 }
 
 <#
@@ -114,20 +79,6 @@ Function Write-Log
 	    }
     }
 }
-
-<#========================================================================================
- Function: Truncate-Log
- 
- Synopsis:	Checks the size of the current log and renames it with today's date.
-========================================================================================#>
-Function Truncate-Log ($log) { 
-	$date = Get-Date -UFormat -%Y-%m-%d
-	If (!(Test-Path $log)) { break }
-	If ((Get-ChildItem $log).Length -gt 1048576) {
-		Rename-Item -Path $log -NewName PowerExtract$date.log 
-	}
-}
-
 
 <#
 .Synopsis
