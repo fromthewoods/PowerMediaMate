@@ -110,7 +110,7 @@ function Get-NameArray
         foreach ($element in $array) {
             #$delimiter=$delimiters[$i]
             # Look for "SxxExx"
-            If ($element -match "^S\d\dE\d\d$" -and ($TV)) { 
+            If ($element -match "^S\d\dE\d\d" -and ($TV)) { 
                 Write-Log "  Found delimiter: $delimiter" -DebugMode
                 Write-Log "  Get-NameArray :Return: $array" -DebugMode
                 Write-Log "*** Leaving: $($MyInvocation.MyCommand.Name) ***`n" -DebugMode
