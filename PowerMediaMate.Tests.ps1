@@ -55,32 +55,45 @@ function Write-Log { Write-Host $args[0] }
 #function Write-Log { $args[0] | Out-Null }
 
 
-Describe -Tags "Script" "Script: _Start.ps1" {
+Describe -Tags "Module" "Module: $moduleName.psm1" {
 
-    It "Driver passes minimum age test." {
-        Mock Get-WmiObject -MockWith { $Global:expected[0] } `
-                           -ParameterFilter { $Class -like "Win32_PnPSignedDriver" } `
-                           -ModuleName $Global:moduleName
-        & $Global:here\$Global:moduleName.ps1 | Should Be $true
+    InModuleScope -ModuleName $moduleName {
+
+        mkdir $uTorrent.uTorrentDL
+
+        It "Get-SFV: 0 sfv in dir" {
+            $actual = Get-SFV -Directory $uTorrent.uTorrentDL
+            $actual.Count  | Should Be 1
+            $actual.GetType().Name | Should Be 'DirectoryInfo'
+        }
+
+        It "Get-SFV: 1 sfv in dir." {
+            New-Item -Path $($uTorrent.uTorrentDL + "\test.sfv")
+            $actual = Get-SFV -Directory $uTorrent.uTorrentDL
+            $actual.Count  | Should Be 1
+            $actual.GetType().Name | Should Be 'FileInfo'
+        }
+        It "Get-SFV: 2 sfv's in sub-dirs." {
+            mkdir "$($uTorrent.uTorrentDL)\test"
+            New-Item -Path $($uTorrent.uTorrentDL + "\test\test2.sfv")
+            $actual = Get-SFV -Directory $uTorrent.uTorrentDL
+            $actual.Count  | Should Be 2
+            $actual.GetType().Name | Should Be 'Object[]'
+        }
     }
 }
 
 
-#Describe -Tags "Module" "Module: $moduleName.psm1" {
+#Describe -Tags "Script" "Script: _Start.ps1" {
 #
-#    It "Get-DriverInfo: The input should match the output." {
-#        Mock Get-WmiObject -MockWith { $Global:expected } `
+#    It "Driver passes minimum age test." {
+#        Mock Get-WmiObject -MockWith { $Global:expected[0] } `
 #                           -ParameterFilter { $Class -like "Win32_PnPSignedDriver" } `
 #                           -ModuleName $Global:moduleName
-#
-#        $actual = Get-DriverInfo -DeviceClass NET -Manufacturer Intel 
-#        $actual | Should Not BeNullOrEmpty
-#
-#        $compare = Compare-Object $Global:expected $actual -Property DeviceName,DriverProviderName,DeviceClass,DriverVersion,Manufacturer,DriverDate
-#        $compare | Should BeNullOrEmpty
+#        & $Global:here\$Global:moduleName.ps1 | Should Be $true
 #    }
 #}
-#
-#Get-Module $Global:moduleName | Remove-Module
-#Remove-Variable -Name moduleName -Scope Global
-#Remove-Variable -Name here -Scope Global 
+
+Get-Module $Global:moduleName | Remove-Module
+Remove-Variable -Name moduleName -Scope Global
+Remove-Variable -Name here -Scope Global 

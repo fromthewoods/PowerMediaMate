@@ -1,4 +1,6 @@
-﻿<#
+﻿
+function Get-Sfv {
+<#
 .Synopsis
    Searches a given directory for any sfv files.
 .DESCRIPTION
@@ -9,10 +11,7 @@
 .EXAMPLE
    Find-Sfv <directoryname>
 #>
-function Find-Sfv
-{
     [CmdletBinding()]
-    [OutputType([int])]
     Param
     (
         # The directory to scan for .sfv files
