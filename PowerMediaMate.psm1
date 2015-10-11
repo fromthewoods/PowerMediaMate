@@ -50,7 +50,7 @@ function Get-Sfv {
     }
 }
 
-
+function Test-SfvLog {
 <#
 .Synopsis
    Look in the log file for the sfv for a success or failure
@@ -59,12 +59,9 @@ function Get-Sfv {
    successful, then return false. If the log isn't found, then invoke the Sfv so it can
    be evaluated.
 .EXAMPLE
-   Read-SfvLog <log.Fullname>
+   Test-SfvLog <log.Fullname>
 #>
-function Read-SfvLog
-{
     [CmdletBinding()]
-    [OutputType([int])]
     Param
     (
         # The sfv file to be evaluated.
@@ -78,21 +75,34 @@ function Read-SfvLog
 
     Process
     {
-        If ($item.GetType().Name -eq 'FileInfo') {
+        If ($item.GetType().Name -eq 'FileInfo')
+        {
             $sfvLog = "$sfvLogsDir`\$($item.Name).txt"
 
-            If (Test-Path -PathType Leaf $sfvLog) {
+            If (Test-Path -PathType Leaf $sfvLog)
+            {
                 $sfvLog = Get-Item $sfvLog
-	    	    If (Select-String -SimpleMatch "All files OK" $sfvLog) {
+	    	    If (Select-String -SimpleMatch "All files OK" $sfvLog)
+                {
     	    		Write-Log "Evaluation SUCCEEDED for: $($sfvLog.Name)" -Stamp
 			        Return $item.Directory
-		        } Else {
+		        }
+                Else
+                {
 			        Write-Log "Evaluation FAILED for: $($sfvLog.Name)" -Stamp
                     Send-Message -subject "Evaluation FAILED for:" -body $sfvLog.Name
     			    Exit
 		        }
-	        } Else { Invoke-Sfv $item $sfvLog }
-        } Else { Return $item }
+	        }
+            Else
+            {
+                Invoke-Sfv $item $sfvLog
+            }
+        }
+        Else
+        {
+            Return $item
+        }
     }
 }
 
