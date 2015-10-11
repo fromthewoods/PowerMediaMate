@@ -59,9 +59,12 @@ Describe -Tags "Module" "Module: $moduleName.psm1" {
 
     InModuleScope -ModuleName $moduleName {
 
-        mkdir $uTorrent.uTorrentDL
-
+        #It "Get-SFV: no dir" {
+        #    Get-SFV -Directory $uTorrent.uTorrentDL | Should Throw
+        #} Need to work on throwing and error handling
+        
         It "Get-SFV: 0 sfv in dir" {
+            mkdir $uTorrent.uTorrentDL
             $actual = Get-SFV -Directory $uTorrent.uTorrentDL
             $actual.Count  | Should Be 1
             $actual.GetType().Name | Should Be 'DirectoryInfo'
@@ -73,6 +76,7 @@ Describe -Tags "Module" "Module: $moduleName.psm1" {
             $actual.Count  | Should Be 1
             $actual.GetType().Name | Should Be 'FileInfo'
         }
+
         It "Get-SFV: 2 sfv's in sub-dirs." {
             mkdir "$($uTorrent.uTorrentDL)\test"
             New-Item -Path $($uTorrent.uTorrentDL + "\test\test2.sfv")

@@ -9,7 +9,7 @@ function Get-Sfv {
    sfv files are found then this function returns an array of FileSystemInfo objects. If no 
    sfv files are found it returns false.
 .EXAMPLE
-   Find-Sfv <directoryname>
+   Get-Sfv <directoryname>
 #>
     [CmdletBinding()]
     Param
