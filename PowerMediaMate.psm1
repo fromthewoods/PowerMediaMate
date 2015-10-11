@@ -21,14 +21,33 @@ function Get-Sfv {
         $Directory
     )
 
-    If (Test-Path -PathType Container $Directory) {
+    If (Test-Path -PathType Container $Directory)
+    {
         # Looking for a download in the base uTorrent directory
-        If ($Directory -like $uTorrentDL) { $objSFV = Get-ChildItem -Path $Directory -Filter *.sfv }
-        Else { $objSFV = Get-ChildItem -Path $Directory -Filter *.sfv -Recurse }
+        If ($Directory -like $uTorrentDL)
+        {
+            $objSFV = Get-ChildItem -Path $Directory -Filter *.sfv
+        }
+        Else
+        {
+            $objSFV = Get-ChildItem -Path $Directory -Filter *.sfv -Recurse
+        }
 
-        If ($objSFV) { Return $objSFV }
-        Else { Write-Log "No sfv files to analyze in: $Directory"; Return Get-Item $Directory }
-    } Else { Write-Log "Could not find the directory: $Directory"; Exit }
+        If ($objSFV)
+        {
+            Return $objSFV
+        }
+        Else
+        {
+            Write-Log "No sfv files to analyze in: $Directory"
+            Return Get-Item $Directory
+        }
+    }
+    Else
+    {
+        Write-Log "Could not find the directory: $Directory"
+        Exit
+    }
 }
 
 
