@@ -31,24 +31,10 @@ Param
 )
 
 #Locate the invocation directory and cd to it to be able to load local functions.
-$parentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$includesDir = "$parentDir\"
-#Remove-Variable parentDir
-cd $includesDir
+$Global:here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-# Include local config and functions using call operator
-. .\Config.ps1
-. .\Common-Functions.ps1
-
-. .\SFV-Evaluator.ps1
-. .\The-Extractor.ps1
-
-. .\The-Renamer.ps1
-. .\The-Renamer-Movie.ps1
-. .\The-Renamer-TV.ps1
-
-. .\tvdb-Functions.ps1
-. .\tmdb-Functions.ps1
+$Global:moduleName = "PowerMediaMate"
+Import-Module $Global:here\$Global:moduleName.psd1 -Force
 
 # Set up the log file name.
 $date = Get-Date -UFormat %Y-%m-%d_%H-%M-%S
@@ -78,4 +64,4 @@ $prop = [ordered]@{
 
 $dl = New-Object -TypeName psobject -Property $prop
 
-$dl | Find-Sfv | Read-SfvLog | Find-RarFile | Extract-File # | Start-TheRenamer -dl $dl
+$dl | Get-Sfv | Test-SfvLog | Find-RarFile | Extract-File # | Start-TheRenamer -dl $dl
