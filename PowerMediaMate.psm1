@@ -106,6 +106,7 @@ function Test-SfvLog {
     }
 }
 
+function Invoke-Sfv {
 <#
 .Synopsis
    Execute QuickSFV on a given sfv file and write the results to a file.
@@ -115,8 +116,6 @@ function Test-SfvLog {
 .EXAMPLE
    Invoke-Sfv <sfv file> <sfv log file>
 #>
-function Invoke-Sfv
-{
     [CmdletBinding()]
     [OutputType([int])]
     Param
@@ -146,7 +145,7 @@ function Invoke-Sfv
     }
 }
 
-
+function Find-RarFile {
 <#
 .Synopsis
    Searches a given directory for any rar files.
@@ -157,8 +156,6 @@ function Invoke-Sfv
 .EXAMPLE
    Find-RarFile <directory> -Recurse
 #>
-function Find-RarFile
-{
     [CmdletBinding()]
     [OutputType([int])]
     Param
@@ -183,6 +180,7 @@ function Find-RarFile
     }
 }
 
+function Extract-File {
 <#
 .Synopsis
    Executes 7-zip on a rar file.
@@ -195,8 +193,6 @@ function Find-RarFile
 .EXAMPLE
    Another example of how to use this cmdlet
 #>
-function Extract-File
-{
     [CmdletBinding()]
     [OutputType([int])]
     Param
@@ -231,6 +227,7 @@ function Extract-File
     }
 }
 
+function Read-ExtractLog {
 <#
 .Synopsis
    Short description
@@ -241,8 +238,6 @@ function Extract-File
 .EXAMPLE
    Another example of how to use this cmdlet
 #>
-function Read-ExtractLog
-{
     [CmdletBinding()]
     [OutputType([int])]
     Param
