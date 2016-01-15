@@ -1,5 +1,4 @@
-﻿
-function Get-Sfv {
+﻿function Get-Sfv {
 <#
 .Synopsis
    Searches a given directory for any sfv files.

@@ -1,7 +1,7 @@
-﻿$Global:here = Split-Path -Parent $MyInvocation.MyCommand.Path
+﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-$Global:moduleName = "PowerMediaMate"
-Import-Module $Global:here\$Global:moduleName.psd1 -Force
+$moduleName = "PowerMediaMate"
+Import-Module $here\$moduleName.psd1 -Force
 
 #region ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # uTorrent cmd line:
@@ -29,7 +29,7 @@ $prop = [ordered] @{
 $uTorrent = New-Object PSObject  -Property $prop
 
 
-$Global:expected = @()
+$expected = @()
 $prop = [ordered]@{
     Name          = "blow-mad.max.fury.road.2015.720p.bluray.x264.jpg"      
     Dir           = "TestDrive:\Downloads\Mad.Max.Fury.Road.2015.720p.BluRay.x264-BLOW"
@@ -42,7 +42,7 @@ $prop = [ordered]@{
     State         = "5"
     Kind          = "multi"
 }
-$Global:expected += (New-Object PSObject -Property $prop)
+$expected += (New-Object PSObject -Property $prop)
 
 # Create fake SFV eval file
 
@@ -98,6 +98,6 @@ Describe -Tags "Module" "Module: $moduleName.psm1" {
 #    }
 #}
 
-Get-Module $Global:moduleName | Remove-Module
+Get-Module $moduleName | Remove-Module
 Remove-Variable -Name moduleName -Scope Global
 Remove-Variable -Name here -Scope Global 
