@@ -2,31 +2,14 @@
 
 $moduleName = "PowerMediaMate"
 Import-Module $here\$moduleName.psd1 -Force
+Import-Module ..\Write-Log\Write-Log.psd1 -Force
+
 
 #region ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # uTorrent cmd line:
 # C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden  -file "D:\Git\PowerMediaMate\_Start.ps1" -Name "%F" -Dir "%D" -Title "%N" -PreviousState "%P" -Label "%L" -Tracker "%T" -StatusMessage "%M" -HexInfoHash "%I" -State "%S" -Kind "%K"
 
-# The location where uTorrent lives.
-$uTorrent = "TestDrive:\"
 
-$prop = [ordered] @{
-    Base = $uTorrent
-    
-    uTorrentDL      = $uTorrent + "Downloads"          # The location where uTorrent downloads files to.
-    tempExtractPath = $uTorrent + "ExtractedDownloads" # The directory where you want the files to be temporarily extracted to. 
-    logLocation     = $uTorrent + "Logs"               # Where the PMM log file will be to written to.
-    sfvLogsDir      = $uTorrent + "SfvLogs"            # Where the sfv evaulations will be logged to
-    MoviesDir       = $uTorrent + "Movies"             # Directories where the Renamers output files
-    TVEpsDir        = $uTorrent + "TV"                 # Directories where the Renamers output files
-    
-    videofiletypes = @('*.avi','*.mkv','*.m2ts','*.mpg','*.mpeg','*.mp4') # Files types to include when resorting to copying files
-    
-    # DEPENDENCIES
-    SevenZip = "C:\Program Files\7-Zip\7z.exe"          # Point this to the 7z.exe location
-    Quicksfv = "C:\Program Files\QuickSFV\QuickSFV.EXE" # Point this to QuickSFV.exe location
-}
-$uTorrent = New-Object PSObject  -Property $prop
 
 
 $expected = @()
@@ -50,21 +33,41 @@ $expected += (New-Object PSObject -Property $prop)
 #endregion
 
 
-# Overwrite Write-Log while in testing
-function Write-Log { Write-Host $args[0] }
-#function Write-Log { $args[0] | Out-Null }
-
 
 Describe -Tags "Module" "Module: $moduleName.psm1" {
 
     InModuleScope -ModuleName $moduleName {
 
+# The location where uTorrent lives.
+$uTorrent = "TestDrive:\"
+
+$prop = [ordered] @{
+    Base = $uTorrent
+    
+    uTorrentDL      = $uTorrent + "Downloads"          # The location where uTorrent downloads files to.
+    tempExtractPath = $uTorrent + "ExtractedDownloads" # The directory where you want the files to be temporarily extracted to. 
+    logLocation     = $uTorrent + "Logs"               # Where the PMM log file will be to written to.
+    sfvLogsDir      = $uTorrent + "SfvLogs"            # Where the sfv evaulations will be logged to
+    MoviesDir       = $uTorrent + "Movies"             # Directories where the Renamers output files
+    TVEpsDir        = $uTorrent + "TV"                 # Directories where the Renamers output files
+    
+    videofiletypes = @('*.avi','*.mkv','*.m2ts','*.mpg','*.mpeg','*.mp4') # Files types to include when resorting to copying files
+    
+    # DEPENDENCIES
+    SevenZip = "$((.\Get-InstalledApp.ps1 -AppID '7-Zip').InstallLocation)7z.exe"       # Placeholder for the 7z.exe location
+    Quicksfv = (Get-ItemProperty HKLM:\SOFTWARE\Classes\File_Verification_Database\DefaultIcon).'(default)'.split(',')[0] # Placeholder for the QuickSFV.exe location
+}
+$uTorrent = New-Object PSObject  -Property $prop
+
+        # Overwrite Write-Log while in testing
+        Mock -CommandName Write-Log -MockWith { Write-Host $args[1] }
+        
         #It "Get-SFV: no dir" {
         #    Get-SFV -Directory $uTorrent.uTorrentDL | Should Throw
         #} Need to work on throwing and error handling
         
         It "Get-SFV: 0 sfv in dir" {
-            mkdir $uTorrent.uTorrentDL
+            New-Item -Path $uTorrent.uTorrentDL -ItemType Directory | Out-Null
             $actual = Get-SFV -Directory $uTorrent.uTorrentDL
             $actual.Count  | Should Be 1
             $actual.GetType().Name | Should Be 'DirectoryInfo'
@@ -98,6 +101,6 @@ Describe -Tags "Module" "Module: $moduleName.psm1" {
 #    }
 #}
 
-Get-Module $moduleName | Remove-Module
-Remove-Variable -Name moduleName -Scope Global
-Remove-Variable -Name here -Scope Global 
+#Get-Module $moduleName | Remove-Module
+#Remove-Variable -Name moduleName -Scope Global
+#Remove-Variable -Name here -Scope Global 
