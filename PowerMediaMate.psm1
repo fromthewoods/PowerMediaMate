@@ -1,15 +1,16 @@
 ﻿function Get-Sfv {
-<#
-.Synopsis
-   Searches a given directory for any sfv files.
-.DESCRIPTION
-   Includes a recurse switch. Searches in a given directory for any sfv files. If only one sfv
-   file is found it returns the System.IO.FileSystemInfo object of the found file. If multiple 
-   sfv files are found then this function returns an array of FileSystemInfo objects. If no 
-   sfv files are found it returns false.
-.EXAMPLE
-   Get-Sfv <directoryname>
-#>
+    <#
+    .Synopsis
+       Searches a given directory for any sfv files.
+    .DESCRIPTION
+       Includes a recurse switch. Searches in a given directory for any sfv files. If only one sfv
+       file is found it returns the System.IO.FileSystemInfo object of the found file. If multiple 
+       sfv files are found then this function returns an array of FileSystemInfo objects. If no 
+       sfv files are found it returns false.
+    .EXAMPLE
+       Get-Sfv <directoryname>
+    #>
+    
     [CmdletBinding()]
     Param
     (
@@ -50,16 +51,17 @@
 }
 
 function Test-SfvLog {
-<#
-.Synopsis
-   Look in the log file for the sfv for a success or failure
-.DESCRIPTION
-   If success is found then return the directory of the sfv that was evaluated. If not
-   successful, then return false. If the log isn't found, then invoke the Sfv so it can
-   be evaluated.
-.EXAMPLE
-   Test-SfvLog <log.Fullname>
-#>
+    <#
+    .Synopsis
+       Look in the log file for the sfv for a success or failure
+    .DESCRIPTION
+       If success is found then return the directory of the sfv that was evaluated. If not
+       successful, then return false. If the log isn't found, then invoke the Sfv so it can
+       be evaluated.
+    .EXAMPLE
+       Test-SfvLog <log.Fullname>
+    #>
+    
     [CmdletBinding()]
     Param
     (
