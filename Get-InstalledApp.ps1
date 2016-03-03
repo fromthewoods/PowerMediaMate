@@ -145,6 +145,10 @@ function main {
         $output | add-member NoteProperty InstallLocation -value `
           $regProv.GetStringValue($HKLM,
           (join-path $UNINSTALL_KEY $subkey), "InstallLocation").sValue
+
+        $output | add-member NoteProperty UninstallString -value `
+          $regProv.GetStringValue($HKLM,
+          (join-path $UNINSTALL_KEY $subkey), "UninstallString").sValue
         # If the property list is empty, output the object;
         # otherwise, try to match all named properties.
         if ($propertyList.Keys.Count -eq 0) {
