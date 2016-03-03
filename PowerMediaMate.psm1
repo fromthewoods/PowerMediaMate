@@ -1,4 +1,77 @@
-﻿function Get-Sfv {
+﻿function Get-Dependencies {
+<#
+.Synopsis
+   Short description
+.DESCRIPTION
+   Long description
+.EXAMPLE
+   Example of how to use this cmdlet
+#>
+
+    Try
+    {
+        $allDependenciesArePresent = $true
+
+        #region ~~~~~ Detect 7z.exe ~~~~~~~~~~~~~~~~~~~~~~~
+        $SevenZip = .\Get-InstalledApp.ps1 | Where-Object { $_.AppName -like '*7-Zip*'}
+        If ($SevenZip.InstallLocation)
+        {
+            $SevenZip = $SevenZip.InstallLocation + '7z.exe'
+        }
+        ElseIf (Get-Item -Path HKLM:\SOFTWARE\7-Zip)
+        {
+            $SevenZip = (Get-ItemProperty -Path HKLM:\SOFTWARE\7-Zip -Name Path).Path + '7z.exe'
+        }
+        Else { $SevenZip = $false }
+
+        If ($SevenZip -eq $null)
+        {
+            $allDependenciesArePresent = $false
+        }
+        ElseIf (-not (Test-Path -Path $SevenZip -ErrorAction SilentlyContinue))
+        {
+            $allDependenciesArePresent = $false
+        }
+        #endregion ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        #region ~~~~~ Detect QuickSFV.exe ~~~~~~~~~~~~~~~~~
+        #$Quicksfv = Invoke-Command -ScriptBlock { $regkey = Get-ItemProperty HKLM:\SOFTWARE\Classes\File_Verification_Database\DefaultIcon -ErrorAction SilentlyContinue
+        #                                          If ($regkey) { $regkey.'(default)'.split(',')[0] } 
+        #                                          Else {$false }
+        #                                          }
+        $regkey = Get-ItemProperty HKLM:\SOFTWARE\Classes\File_Verification_Database\DefaultIcon -ErrorAction SilentlyContinue
+        If ($regkey)
+        {
+            $Quicksfv = $regkey.'(default)'.split(',')[0]
+        } 
+        Else { $Quicksfv = $false }
+
+        If (!$Quicksfv)
+        {
+            $allDependenciesArePresent = $false
+        }
+        ElseIf (-not (Test-Path -Path $Quicksfv -ErrorAction SilentlyContinue))
+        {
+            $allDependenciesArePresent = $false
+        }
+        #endregion ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        If ($allDependenciesArePresent)
+        {
+            New-Object -TypeName psobject -Property { SevenZip = $SevenZip
+                                                      QuickSfv = $Quicksfv }
+        }
+        Else { $false }
+    }
+    Catch
+    {
+        Write-Log "ERROR: $($_.Exception.Message)"
+        Write-Log "ERROR: $($_.InvocationInfo.PositionMessage.Split('+')[0])"
+        Exit 1
+    } 
+}
+
+function Get-Sfv {
     <#
     .Synopsis
        Searches a given directory for any sfv files.
