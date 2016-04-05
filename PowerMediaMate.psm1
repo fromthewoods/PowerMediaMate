@@ -209,7 +209,7 @@ function Get-SevenZip {
     } 
 }
 
-function Get-QuickSFV {
+function Get-QuickSfv {
 <#
 .Synopsis
    Returns the location of QuickSfv.exe, if detected. Otherwise it returns false.

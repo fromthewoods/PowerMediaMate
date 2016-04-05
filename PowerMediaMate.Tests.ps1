@@ -58,24 +58,52 @@ Describe -Tags 'DP' 'Get-SevenZip' {
     }
 } 
 
-#Describe -Tags "DP" "Get-Dependencies" {
-#    InModuleScope -ModuleName $moduleName {
-#        # Overwrite Write-Log while in testing
-#        Mock -CommandName Write-Log -MockWith { Write-Host $args[1] }
-#		#Mock -CommandName Write-Log -MockWith {} 
-#
-#        
-#        Mock -CommandName Get-InstalledApp.ps1 -MockWith { Return $null }
-#        
-#        It "Should return null" {
-#            Test-Domain -Name "SHRHST" | Should Be $true
-#        }
-#
-#        It "The domain should NOT match." {
-#            Test-Domain -Name "fail" | Should Be $false
-#        }
-#    }
-#} 
+ Describe -Tags 'DP' 'Get-QuickSfv' {
+    InModuleScope -ModuleName $moduleName {
+        # Overwrite Write-Log while in testing
+        Mock -CommandName Write-Log -MockWith { Write-Host $args[1] }
+		#Mock -CommandName Write-Log -MockWith {} 
+
+        
+        Mock -CommandName Get-ItemProperty -MockWith { New-Object psobject -Property @{ '(default)' = 'D:\Derp\QuickSFV.EXE,0' } }
+        
+        It 'Should return fake location.' {
+            Get-QuickSFV | Should Be 'D:\Derp\QuickSFV.EXE'
+        }
+
+        Mock -CommandName Get-ItemProperty -MockWith { Return $null }
+        It 'Should return false.' {
+            Get-QuickSFV | Should Be $false
+        }
+    }
+}  
+
+Describe -Tags 'DP' 'Get-Dependencies' {
+    InModuleScope -ModuleName $moduleName {
+        # Overwrite Write-Log while in testing
+        Mock -CommandName Write-Log -MockWith { Write-Host $args[1] }
+		#Mock -CommandName Write-Log -MockWith {} 
+
+        
+        Mock -CommandName Get-SevenZip -MockWith { Return $false }
+        Mock -CommandName Get-QuickSfv -MockWith { Return 'D:\Derp\QuickSFV.EXE' }
+        It 'Should return false' {
+            Get-Dependencies | Should Be $false
+        }
+
+        Mock -CommandName Get-SevenZip -MockWith { Return 'D:\derp\7z.exe' }
+        Mock -CommandName Get-QuickSfv -MockWith { Return $false }
+        It 'Should return false' {
+            Get-Dependencies | Should Be $false
+        }
+
+        Mock -CommandName Get-SevenZip -MockWith { Return 'D:\derp\7z.exe' }
+        Mock -CommandName Get-QuickSfv -MockWith { Return 'D:\Derp\QuickSFV.EXE' }
+        It 'Should return false' {
+            Get-Dependencies | Should Be $false
+        }
+    }
+} 
 
 
 
